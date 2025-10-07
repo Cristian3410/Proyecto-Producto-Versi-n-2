@@ -1,0 +1,118 @@
+Sistema de Login, Registro y Control de Horarios
+Aplicación web de gestión que permite a los usuarios registrarse, iniciar sesión y mantener la sesión activa mediante JSON Web Tokens (JWT) almacenados en cookies.
+
+El sistema también permite visualizar los horarios asignados de lunes a domingo y registrar las horas de entrada y salida, guardando un historial accesible para cada usuario.
+
+Cuenta con un diseño moderno y responsivo, y está dividida en dos partes:
+
+Backend: Node.js + Express + MySQL
+
+Frontend: React + Vite
+
+📋 Características principales
+Registro e inicio de sesión con validación de credenciales.
+
+Autenticación segura con JWT y almacenamiento en cookies.
+
+Validación de campos en el cliente para evitar datos inválidos.
+
+Visualización de horarios asignados (lunes a domingo).
+
+Registro de hora de entrada y salida con almacenamiento en base de datos.
+
+Consulta del historial de horas registradas.
+
+Diseño responsivo optimizado para dispositivos móviles.
+
+Arquitectura separada entre frontend y backend para mejor escalabilidad.
+
+🚀 Tecnologías utilizadas
+Frontend
+
+React.js (con Vite)
+
+CSS3 con variables (vars.css)
+
+JavaScript
+
+Backend
+
+Node.js
+
+Express.js
+
+MySQL
+
+Herramientas y entornos
+
+Visual Studio Code
+
+JWT (autenticación)
+
+Cookies (persistencia de sesión)
+
+MySQL como lenguaje y motor de base de datos
+
+📦 Instalación y ejecución
+Sigue estos pasos para instalar y correr el proyecto en tu equipo:
+
+1️⃣ Descargar el proyecto desde GitHub
+Ve al repositorio: mgdt-Proyecto-final
+
+Haz clic en el botón verde Code y selecciona Download ZIP.
+
+Extrae el archivo ZIP en la ubicación que prefieras.
+
+2️⃣ Abrir en Visual Studio Code
+Abre la carpeta principal del proyecto en VS Code.
+
+Verás dos carpetas:
+
+backend → Contiene el servidor y la lógica del sistema.
+
+frontend → Contiene la interfaz de usuario.
+
+3️⃣ Iniciar el Backend
+bash
+Copiar
+Editar
+cd backend
+cd src
+node index.js
+Esto iniciará el servidor backend en Node.js.
+
+4️⃣ Iniciar el Frontend
+bash
+Copiar
+Editar
+cd frontend
+npm install
+npm run dev
+Copia y pega en tu navegador el enlace que aparezca en la terminal, normalmente será:
+
+arduino
+Copiar
+Editar
+http://localhost:5173/
+✅ ¡Listo! Ya podrás usar el sistema.
+
+
+
+📜 Política de Tratamiento de Datos Personales
+Este sistema utiliza información personal de los usuarios únicamente con el fin de:
+
+Permitir el acceso y autenticación dentro de la aplicación.
+
+Gestionar horarios y registros de entrada/salida.
+
+Mantener la persistencia de sesión mediante cookies.
+
+Compromisos de privacidad:
+
+No se compartirá, venderá ni transferirá información personal a terceros.
+
+Toda la información es almacenada en bases de datos seguras.
+
+El usuario puede solicitar en cualquier momento la eliminación de sus datos.
+
+Al utilizar esta aplicación, el usuario acepta el tratamiento de sus datos personales según lo descrito en esta política.

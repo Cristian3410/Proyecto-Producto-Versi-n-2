@@ -1,0 +1,64 @@
+@import "../vars.css";
+
+
+
+
+
+.iconClose{
+  position: absolute;
+  top: 0;
+  left: 80%;
+  width: 30%;
+  height: 30%;
+  cursor: pointer;
+  z-index:30;
+  }
+  
+
+.blurbgoverlay{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter:blur(5px);
+  z-index: 5;
+}
+
+
+.errores{
+    position:fixed;
+    top: 50%;
+    left: 45.5%;
+    max-width: 300px;
+    width: 100%;
+    pointer-events: none;
+    background: #fe9090;
+    transform: translate(-50%,-50%);
+    z-index: 20;
+    transition: top 0.3s ease, opacity 0.1s;
+    padding: 10px 30px;
+    border-left: 5px solid #f02f2f;
+    border-radius: 5px;
+    color: #f02f2f;
+    text-align: center;
+    font-size: large;
+    top: calc(260px + var(--index) * 100px)
+}
+
+
+.icon{
+  color: #f02f2f;
+   left:2%;
+  font-size: x-large;
+  position: absolute;
+  cursor: pointer;
+}
+
+
+
+
+
+
+
+
