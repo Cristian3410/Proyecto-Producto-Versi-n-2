@@ -97,10 +97,13 @@ function AccessPage() {
             <button className={styles.button}>Iniciar sesión</button>
           </form>
 
-          <div className={styles.linkRes}>
-            ¿Aún no te encuentras registrado?{" "}
-            <Link onClick={handleAcces}>Crear cuenta</Link>
-          </div>
+      <div className={styles.linkRes}>
+  ¿Aún no te encuentras registrado?{" "}
+  <button type="button" onClick={handleAcces} className={styles.linkButton} >
+    Crear cuenta
+  </button>
+</div>
+
         </div>
 
         {/* REGISTER */}
@@ -273,10 +276,18 @@ function AccessPage() {
             <button className={styles.button}>Crear cuenta</button>
           </form>
 
-          <div className={styles.linkRes}>
-            ¿Ya se encuentra registrado?{" "}
-            <Link onClick={handleAcces}>Iniciar sesión</Link>
-          </div>
+        <div className={styles.linkRes}>
+  ¿Ya se encuentra registrado?{" "}
+  <Link
+    to="#"
+    onClick={(e) => {
+      e.preventDefault(); // evita que recargue la página
+      handleAcces();      // cambia entre login y registro
+    }}
+  >
+    Iniciar sesión
+  </Link>
+</div>
         </div>
       </div>
     </>

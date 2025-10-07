@@ -1,6 +1,40 @@
 @import "../../vars.css";
 
 
+.linkButton {
+  background: #19376d;
+  color: #fff;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  margin-left: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Efecto al pasar el mouse */
+.linkButton:hover {
+  background: #576cbc;
+  color: #fff;
+  transform: scale(1.05);
+}
+
+/* Efecto cuando se presiona */
+.linkButton:active {
+  transform: scale(0.97);
+}
+
+/* Para pantallas pequeñas */
+@media screen and (max-width: 830px) {
+  .linkButton {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
 
 .formPopup{
     position:absolute;

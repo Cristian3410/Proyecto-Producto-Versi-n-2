@@ -16,98 +16,109 @@ const TOKEN_SECRET = process.env.TOKEN_SECRET;
 
 
 export const register = async (req, res) => {
-  const {
-    identificacion,
-    nombres,
-    apellidos,
-    celular,
-    email,
-    edad,
-    cargo,
-    usuario,
-    contraseña,
-    rol,
-  } = req.body;
+  try {
+    const {
+      identificacion,
+      nombres,
+      apellidos,
+      celular,
+      email,
+      edad,
+      cargo,
+      usuario,
+      contraseña,
+      rol,
+    } = req.body;
 
-  const [existingEmployee] = await pool.query(findUserExistEmployee, [
-    identificacion,
-    email,
-    celular,
-  ]);
-
-  if (existingEmployee.length > 0) {
-    let errores = [];
-
-    const campos = [
-      {
-        campo: "cedula",
-        valor: identificacion,
-        mensaje: "el numero de cedula ya se encuentra registrado",
-      },
-      {
-        campo: "correo",
-        valor: email,
-        mensaje: "el correo electronico ya se encuentra registrado ",
-      },
-      {
-        campo: "telefono",
-        valor: celular,
-        mensaje: "el numero de telefono ya se encuentra registrado",
-      },
-    ];
-
-    campos.forEach(({ campo, valor, mensaje }) => {
-      const duplicado = existingEmployee.find((user) => user[campo] === valor);
-
-      if (duplicado) {
-        errores.push(mensaje);
-      }
-    });
-    return res.status(400).json(errores);
-  }
-
-  const [existingUser] = await pool.query(findUserExistUsers, [usuario]);
-
-  if (existingUser.length > 0) {
-    return res.status(400).json("el usuario ya se encuentra registrado");
-  }
-
-  const passhash = await bcrypt.hash(contraseña, 10);
-
-  const [result] = await pool.query(insertNewUserDataBase, [
-    usuario,
-    passhash,
-    rol,
-  ]);
-
-  const idDb = result.insertId;
-
-  const newEmployee = await pool.query(insertNewEmployee, [
-    idDb,
-    identificacion,
-    nombres,
-    apellidos,
-    celular,
-    email,
-    edad,
-    cargo,
-  ]);
-
-  const addScheduleId = await pool.query(InsertScheduleId,[idDb])
-
-  const addiDInShifts = await pool.query(iDInShifts,[idDb])
-
-  const token = await createAccessToken({ username:usuario, userId:idDb});
-
-  res.cookie("token", token);
-  console.log(token);
-  res
-    .status(200)
-    .json([
-      "El usuario ha sido registrado exitosamente. Por favor, diríjase al inicio de sesión e ingrese utilizando su correo electrónico y la contraseña que ha registrado.",
+    // 1️⃣ Verificar si ya existe un empleado con la misma cédula, correo o teléfono
+    const [existingEmployee] = await pool.query(findUserExistEmployee, [
+      identificacion,
+      email,
+      celular,
     ]);
-};
 
+    if (existingEmployee.length > 0) {
+      let errores = [];
+
+      const campos = [
+        {
+          campo: "cedula",
+          valor: identificacion,
+          mensaje: "El número de cédula ya se encuentra registrado",
+        },
+        {
+          campo: "correo",
+          valor: email,
+          mensaje: "El correo electrónico ya se encuentra registrado",
+        },
+        {
+          campo: "telefono",
+          valor: celular,
+          mensaje: "El número de teléfono ya se encuentra registrado",
+        },
+      ];
+
+      campos.forEach(({ campo, valor, mensaje }) => {
+        const duplicado = existingEmployee.find((user) => user[campo] === valor);
+        if (duplicado) errores.push(mensaje);
+      });
+
+      return res.status(400).json(errores);
+    }
+
+    // 2️⃣ Verificar si ya existe el usuario
+    const [existingUser] = await pool.query(findUserExistUsers, [usuario]);
+    if (existingUser.length > 0) {
+      return res.status(400).json("El usuario ya se encuentra registrado");
+    }
+
+    // 3️⃣ Encriptar contraseña
+    const passhash = await bcrypt.hash(contraseña, 10);
+
+    // 4️⃣ Insertar en la tabla usuarios
+    const [userResult] = await pool.query(insertNewUserDataBase, [
+      usuario,
+      passhash,
+      rol,
+    ]);
+
+    const usuarioId = userResult.insertId; // ID del usuario recién creado
+
+    // 5️⃣ Insertar en la tabla empleados (conectado al usuario)
+    const [employeeResult] = await pool.query(insertNewEmployee, [
+      usuarioId,
+      identificacion,
+      nombres,
+      apellidos,
+      celular,
+      email,
+      edad,
+      cargo,
+    ]);
+
+    const empleadoId = employeeResult.insertId; // ID del empleado recién creado
+
+    // 6️⃣ Insertar registros relacionados
+    await pool.query(InsertScheduleId, [empleadoId]); // registros_asistencia
+    await pool.query(iDInShifts, [empleadoId]); // horarios
+
+    // 7️⃣ Crear token JWT
+    const token = await createAccessToken({ username: usuario, userId: usuarioId });
+
+    res.cookie("token", token);
+
+    console.log(`✅ Usuario ${usuario} registrado correctamente`);
+    console.log(`🧍 ID usuario: ${usuarioId} | 👷 ID empleado: ${empleadoId}`);
+
+    return res.status(200).json([
+      "El usuario ha sido registrado exitosamente. Por favor, diríjase al inicio de sesión e ingrese utilizando su correo y contraseña.",
+    ]);
+
+  } catch (error) {
+    console.error("❌ Error en el registro:", error);
+    return res.status(500).json(["Error interno del servidor"]);
+  }
+};
 
 
 

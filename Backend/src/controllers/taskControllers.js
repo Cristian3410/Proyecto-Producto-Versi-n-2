@@ -52,13 +52,34 @@ export const registerCheckOutTime = async (req, res) => {
 
 
 export const ViewShifts = async (req, res) => {
-  const { username, userId } = req.user;
+  try {
+    const { userId } = req.user; // viene del token, es usuarios.id
 
-  const [horarios] = await pool.query("SELECT * FROM horarios WHERE empleado_id = ?", [userId]);
-  console.log(horarios);
+    // 1️⃣ Obtener el id del empleado
+    const [empleadoRows] = await pool.query(
+      "SELECT id FROM empleados WHERE usuario_id = ?",
+      [userId]
+    );
 
-  return res.status(200).json(horarios);
+    if (empleadoRows.length === 0) {
+      return res.status(404).json({ message: "Empleado no encontrado" });
+    }
+
+    const empleadoId = empleadoRows[0].id;
+
+    // 2️⃣ Traer los horarios del empleado
+    const [horarios] = await pool.query(
+      "SELECT * FROM horarios WHERE empleado_id = ?",
+      [empleadoId]
+    );
+
+    return res.status(200).json(horarios);
+  } catch (error) {
+    console.error("Error al traer los horarios:", error);
+    return res.status(500).json({ message: "Error del servidor" });
+  }
 };
+
 
 
 export const changePassword = async (req, res) => {
